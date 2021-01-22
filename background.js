@@ -7,7 +7,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (tab.url.startsWith("https://www.youtube.com/") && 
         tab.url.includes("index=")) {
         console.log('run PauseOnEnd.js on ' + tab.url);
-        chrome.tabs.executeScript(null, {file:"PauseOnEnd.js"});
+        chrome.tabs.executeScript(tabId, {file:"PauseOnEnd.js"});
     }
 
 });
