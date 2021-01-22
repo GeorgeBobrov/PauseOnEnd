@@ -4,10 +4,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     // console.log(tab);
     if (changeInfo.title)
     if (tab.status === "complete")
-    if (tab.url.startsWith("https://www.youtube.com/") && 
-        tab.url.includes("index=")) {
-        console.log('run PauseOnEnd.js on ' + tab.url);
-        chrome.tabs.executeScript(tabId, {file:"PauseOnEnd.js"});
+    if (tab.url.startsWith("https://www.youtube.com/")) {
+        if (tab.url.includes("index=")) {
+            console.log('run PauseOnEnd.js on ' + tab.url);
+            chrome.tabs.executeScript(tabId, {file:"PauseOnEnd.js"});
+        }
+
+        console.log('run ShowDateOnYoutube.js on ' + tab.url);
+        chrome.tabs.executeScript(tabId, {file:"ShowDateOnYoutube.js"});
     }
 
 });
