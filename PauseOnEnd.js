@@ -94,5 +94,6 @@ function cbPauseOnEndOnClick(event) {
 }
 
 function getPlaylistID() {
-	return document.URL.match(/list=([0-9a-zA-Z-]+)/)[1];
+	let matchList = document.URL.match(/list=([0-9a-zA-Z-_]+)/);
+	return (matchList.length > 1) ? matchList[1] : null;
 }	
