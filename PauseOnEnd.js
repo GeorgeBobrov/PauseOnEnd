@@ -20,7 +20,7 @@ function checkAndCreate() {
 }
 
 function createCheckboxElement(){
-	console.log('Create PauseOnEnd element on ' + document.URL); 
+	console.log(new Date().toISOString() +' Create PauseOnEnd element on ' + document.URL); 
 	let div = document.createElement('div'); 
 	div.id = idPauseOnEnd;
 	div.style.marginTop = '13px';
@@ -58,6 +58,31 @@ function readSettings(checkbox) {
 var dontPauseAgain = false; 
 
 function addObserver(){
+	let playlistActionsConteiner = document.querySelector('#playlist-actions')
+
+	if (playlistActionsConteiner) {
+		let observer = new MutationObserver(mutationRecords => {
+			for (const mutationRecord of mutationRecords) {
+				// console.log(mutationRecord.target);
+				// if (mutationRecord.removedNodes.length > 0)
+				//   console.log(mutationRecord.removedNodes[0].nodeName);
+
+				if ((mutationRecord.type == "childList") &&
+					(mutationRecord.removedNodes.length > 0) && 
+					(mutationRecord.removedNodes[0].id == idPauseOnEnd))
+					{
+						console.log(new Date().toISOString() + ' mutation: PauseOnEnd deleted ');
+						checkAndCreate();
+					}
+			}
+		});
+
+		observer.observe(playlistActionsConteiner, {
+			childList: true, 
+			subtree: true,
+			characterData: false
+		}); 
+	}
 
 	return setInterval(function() {
 		let checkboxPauseOnEnd = document.getElementById(idcheckboxPauseOnEnd)
@@ -98,4 +123,4 @@ function cbPauseOnEndOnClick(event) {
 function getPlaylistID() {
 	let matchList = document.URL.match(/list=([0-9a-zA-Z-_]+)/);
 	return (matchList &&  (matchList.length > 1)) ? matchList[1] : null;
-}	
+}
