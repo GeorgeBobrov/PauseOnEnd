@@ -2,24 +2,22 @@ var idPauseOnEnd = 'PauseOnEnd';
 var idcheckboxPauseOnEnd = 'cbPauseOnEnd';
 var selectorContainerToPlace = '#playlist-actions #top-level-buttons'
 
+// console.log(new Date().toISOString() + ' run PauseOnEnd.js on ' + document.URL);
+
 var observerId;
 if (!observerId) 
 	observerId = addObserver();
 
 
-function checkAndCreate() {
+function checkContainerAndCreate() {
 	let containerToPlace = document.querySelector(selectorContainerToPlace);  
 	if (!containerToPlace) 
 		console.log('No container to place PauseOnEnd')
-	else { 
-		let alreadyCreated = document.getElementById(idPauseOnEnd);
-		if (!alreadyCreated) {
-			containerToPlace.appendChild(createCheckboxElement())
-		}
-	}  
+	else  
+		containerToPlace.appendChild(createPauseOnEndElement())
 }
 
-function createCheckboxElement(){
+function createPauseOnEndElement(){
 	console.log(new Date().toISOString() +' Create PauseOnEnd element on ' + document.URL); 
 	let div = document.createElement('div'); 
 	div.id = idPauseOnEnd;
@@ -66,13 +64,18 @@ function addObserver(){
 				// console.log(mutationRecord.target);
 				// if (mutationRecord.removedNodes.length > 0)
 				//   console.log(mutationRecord.removedNodes[0].nodeName);
+				// for (const removedNode of mutationRecord.removedNodes) 
+				// 	console.log(new Date().toISOString() + ' removedNode: ' + removedNode);
+
+				// for (const addedNode of mutationRecord.addedNodes) 
+				// 	console.log(new Date().toISOString() + ' addedNode: ' + addedNode);
 
 				if ((mutationRecord.type == "childList") &&
 					(mutationRecord.removedNodes.length > 0) && 
 					(mutationRecord.removedNodes[0].id == idPauseOnEnd))
 					{
 						console.log(new Date().toISOString() + ' mutation: PauseOnEnd deleted ');
-						checkAndCreate();
+						checkContainerAndCreate();
 					}
 			}
 		});
@@ -85,11 +88,14 @@ function addObserver(){
 	}
 
 	return setInterval(function() {
-		let checkboxPauseOnEnd = document.getElementById(idcheckboxPauseOnEnd)
-		if (!checkboxPauseOnEnd) 
-			checkAndCreate();
+		//some parts of youtube interface can be hidden, exclude them from the search
+		let checkboxPauseOnEnd = 
+			document.querySelector(`ytd-playlist-panel-renderer:not([hidden]) #${idcheckboxPauseOnEnd}`);
+		if (!checkboxPauseOnEnd) {
+			checkContainerAndCreate();
+			checkboxPauseOnEnd = document.getElementById(idcheckboxPauseOnEnd)
+		} 
 			
-		checkboxPauseOnEnd = document.getElementById(idcheckboxPauseOnEnd)
 		let videos = document.querySelectorAll('video')
 
 		if ((videos.length > 0) && (checkboxPauseOnEnd) && (checkboxPauseOnEnd.checked) ) {
@@ -124,3 +130,4 @@ function getPlaylistID() {
 	let matchList = document.URL.match(/list=([0-9a-zA-Z-_]+)/);
 	return (matchList &&  (matchList.length > 1)) ? matchList[1] : null;
 }
+
