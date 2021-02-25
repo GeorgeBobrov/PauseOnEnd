@@ -96,12 +96,12 @@ function addObserver(){
 			checkboxPauseOnEnd = document.getElementById(idcheckboxPauseOnEnd)
 		} 
 			
-		let videos = document.querySelectorAll('video')
+		let video = document.querySelector('video')
 
-		if ((videos.length > 0) && (checkboxPauseOnEnd) && (checkboxPauseOnEnd.checked) ) {
-			if (videos[0].duration - videos[0].currentTime < 1) {
+		if ((video) && (checkboxPauseOnEnd) && (checkboxPauseOnEnd.checked) ) {
+			if (video.duration - video.currentTime < video.playbackRate) {
 				if (!dontPauseAgain) { 
-					videos[0].pause();
+					video.pause();
 					//Pause on the end of video only one time
 					dontPauseAgain = true; //if the user clicks "play", the pause will not occur again
 				}
