@@ -127,7 +127,7 @@ function cbPauseOnEndOnClick(event) {
 }
 
 function getPlaylistID() {
-	let matchList = document.URL.match(/list=([0-9a-zA-Z-_]+)/);
-	return (matchList &&  (matchList.length > 1)) ? matchList[1] : null;
+	let url = new URL(document.URL)
+	return url.searchParams.get("list")
 }
 
