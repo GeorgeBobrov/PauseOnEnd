@@ -55,10 +55,15 @@ function readSettings(checkbox) {
 }
 
 var dontPauseAgain = false;
+var prevDocumentURL;
 
 function addObserver(){
 
 	return setInterval(function() {
+		//skip pausing on end if an advertisement is playing
+		let isThisAd = document.querySelector('.video-ads')?.childElementCount > 0;
+		if (isThisAd) return; 
+
 		//some parts of youtube interface can be hidden, exclude them from the search
 		let checkboxPauseOnEnd =
 			document.querySelector(`ytd-playlist-panel-renderer:not([hidden]) #${idcheckboxPauseOnEnd}`);
