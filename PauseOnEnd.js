@@ -55,7 +55,6 @@ function readSettings(checkbox) {
 }
 
 var dontPauseAgain = false;
-var prevDocumentURL;
 
 function addObserver(){
 

@@ -2,10 +2,10 @@
    "manifest_version": 2,
    "name": "PauseOnEnd",
    "description": "Pauses the video on its last second",
-   "version": "1.4.8",
+   "version": "1.5",
    "content_scripts": [ {
       "js": [ "PauseOnEnd.js" ],
-      "matches": [ "https://www.youtube.com/watch*" ]
+      "matches": [ "https://www.youtube.com/watch*list=*" ]
    } ],
    "background": {
       "scripts": ["background.js"],
