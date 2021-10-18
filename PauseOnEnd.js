@@ -75,7 +75,11 @@ function addObserver(){
 		let video = document.querySelector('video')
 
 		if ((video) && (checkboxPauseOnEnd) && (checkboxPauseOnEnd.checked) ) {
-			if (video.duration - video.currentTime < video.playbackRate) {
+			//pause in 1 second before the end, but at increased playback speed 
+			//more than one second of video is played in one real second,
+			//therefore we increase the threshold in this case
+			let threshold = Math.max(1, video.playbackRate);
+			if (video.duration - video.currentTime < threshold) {
 				if (!dontPauseAgain) {
 					video.pause();
 					//Pause on the end of video only one time
