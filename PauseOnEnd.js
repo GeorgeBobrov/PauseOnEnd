@@ -22,21 +22,22 @@ function createPauseOnEndElement(){
 	console.log(new Date().toISOString() +' Create PauseOnEnd element on ' + document.URL);
 	let div = document.createElement('div');
 	div.id = idPauseOnEnd;
-	div.style.marginTop = '13px';
-	div.style.marginLeft = '20px';
+	div.style.display = 'flex';
+	div.style.alignItems = 'center';
+	div.style.marginLeft = '18px';
 	div.style.fontSize = '12px';
 
 	let checkboxPauseOnEnd = document.createElement('input');
 	checkboxPauseOnEnd.type = "checkbox";
 	checkboxPauseOnEnd.id = idcheckboxPauseOnEnd;
-	checkboxPauseOnEnd.style.margin = '-3px 1px 0px 2px';
-	checkboxPauseOnEnd.style.verticalAlign = 'middle';
+	checkboxPauseOnEnd.style.marginTop = '1px';
+	// checkboxPauseOnEnd.style.verticalAlign = 'middle';
 	checkboxPauseOnEnd.onclick = cbPauseOnEndOnClick;
 	readSettings(checkboxPauseOnEnd);
 
 	let span = document.createElement('span');
 	span.innerHTML = 'Pause On End';
-	span.style.marginLeft = '5px';
+	span.style.marginLeft = '3px';
 	span.style.color = '#767676';
 
 	div.appendChild(checkboxPauseOnEnd);
