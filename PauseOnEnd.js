@@ -1,20 +1,33 @@
 /*global chrome*/
 var idPauseOnEnd = 'PauseOnEnd';
 var idcheckboxPauseOnEnd = 'cbPauseOnEnd';
-var selectorContainerToPlace = '#playlist-actions #top-level-buttons-computed';
+var selectorPlaylist = 'ytd-playlist-panel-renderer:not([hidden])'; //some parts of youtube interface can be hidden
+var selectorPlaylistButtons = '#playlist-actions #top-level-buttons-computed';
 
 // console.log(new Date().toISOString() + ' run PauseOnEnd.js on ' + document.URL);
 
-var observerId;
-if (!observerId)
-	observerId = addObserver();
+var intervalId;
+checkAddObserver()
 
+document.addEventListener("yt-navigate-finish", function(event) {
+	// console.log("yt-navigate-finish from PauseOnEnd")
+	checkAddObserver()
+})
+
+function checkAddObserver() {
+    if (location.pathname == "/watch") 
+        if (document.URL.includes("list=")) 
+			if (!intervalId)
+				intervalId = addObserver();
+}
 
 function checkContainerAndCreate() {
-	let containerToPlace = document.querySelector(selectorContainerToPlace);
-	if (!containerToPlace)
+	let containerToPlace = document.querySelector(`${selectorPlaylist} ${selectorPlaylistButtons}`);
+	if (!containerToPlace) {
 		console.log('No container to place PauseOnEnd')
-	else
+		clearInterval(intervalId)
+		intervalId = null
+	} else
 		containerToPlace.appendChild(createPauseOnEndElement())
 }
 
@@ -66,7 +79,7 @@ function addObserver(){
 
 		//some parts of youtube interface can be hidden, exclude them from the search
 		let checkboxPauseOnEnd =
-			document.querySelector(`ytd-playlist-panel-renderer:not([hidden]) #${idcheckboxPauseOnEnd}`);
+			document.querySelector(`${selectorPlaylist} #${idcheckboxPauseOnEnd}`);
 		if (!checkboxPauseOnEnd) {
 			checkContainerAndCreate();
 			checkboxPauseOnEnd = document.getElementById(idcheckboxPauseOnEnd)
