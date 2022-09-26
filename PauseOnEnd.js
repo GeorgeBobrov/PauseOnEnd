@@ -3,6 +3,7 @@ var idPauseOnEnd = 'PauseOnEnd';
 var idcheckboxPauseOnEnd = 'cbPauseOnEnd';
 var selectorPlaylist = 'ytd-playlist-panel-renderer:not([hidden])'; //some parts of youtube interface can be hidden
 var selectorPlaylistButtons = '#playlist-actions #top-level-buttons-computed';
+var idDefaultState = 'DefaultState';
 
 // console.log(new Date().toISOString() + ' run PauseOnEnd.js on ' + document.URL);
 
@@ -63,10 +64,20 @@ function readSettings(checkbox) {
 	let playlistID = getPlaylistID();
 	if (!playlistID) return;
 
-	chrome.storage.local.get([playlistID], function(data) {
-		checkbox.checked = data[playlistID] || false;
+	chrome.storage.local.get([playlistID, idDefaultState], function(data) {
+		checkbox.checked = data[playlistID] ?? data[idDefaultState] ?? false;
 	});
 }
+
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+	if (changes[idDefaultState]) {
+		let checkboxPauseOnEnd = 
+			document.querySelector(`${selectorPlaylist} #${idcheckboxPauseOnEnd}`);
+
+		readSettings(checkboxPauseOnEnd)
+	}
+})
+	
 
 var dontPauseAgain = false;
 
